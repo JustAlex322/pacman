@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #game-board {
-  width: 180px;
+  width: 186px;
   height: 180px;
   display: -webkit-box;
   display: -ms-flexbox;
