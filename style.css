@@ -101,7 +101,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #game-board .point {
   z-index: 2;
-  background-image: url("../snake/clipart1405756.png");
+  background-image: url("../img/clipart1405756.png");
   background-size: contain;
 }
 
