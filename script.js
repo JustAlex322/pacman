@@ -233,17 +233,18 @@ function ghostMove() {
 
 function checkLose() {
     if (point == countPoint) {
+        Ghost.style.display = 'none';
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
         return 0;
     } else if (indexPacman == indexGhost) {
-        alert('ТЫ ЖАЛОК!!!!');
+        pacMan.style.display = 'none';
+        setTimeout(() => alert('Ты ЖАЛОК'), 100)
         return 1;
     }
     return 2;
 }
 
 function game() {
-    let f;
     let timerId = setTimeout(function tick() {
         movePacman();
         timerId = setTimeout(tick, 800); // (*)
@@ -253,10 +254,9 @@ function game() {
         timerId2 = setTimeout(tick2, 800); // (*)
     }, 800);
     let timerId3 = setTimeout(function tick3() {
-        f = checkLose();
+        let f = checkLose();
         if (f == 0 || f == 1) {
             document.removeEventListener('keydown', userMove);
-
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
