@@ -87,13 +87,14 @@ function autoMovePacman() {
     }
 }
 
+let flag3 = false;
+document.addEventListener('keydown', userMove);
+
 function movePacman() {
-    let flag = false;
-    document.addEventListener('keydown', userMove);
-    if (!flag) {
+    if (!flag3) {
         autoMovePacman();
     }
-    flag = false;
+    flag3 = false;
 }
 
 
@@ -113,7 +114,7 @@ function getUserChoose(e) {
 
 
 function userMove(e) {
-    flag = true;
+    flag3 = true;
     switch (getUserChoose(e)) {
         case 0:
             if (!grid[indexPacman + step].classList.contains('wall') && indexPacman + step < grid.length) { // шаг вниз
