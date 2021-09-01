@@ -255,6 +255,8 @@ function game() {
     let timerId3 = setTimeout(function tick3() {
         f = checkLose();
         if (f == 0 || f == 1) {
+            document.removeEventListener('keydown', userMove);
+
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
