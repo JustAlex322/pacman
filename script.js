@@ -162,10 +162,11 @@ grid[indexGhost].insertAdjacentElement(
 )
 
 function delGhost(index) {
-    grid[index].classList.remove('last');
+    document.querySelector('.last').classList.remove('last');
     grid[indexGhost].querySelector('.ghost').remove();
     grid[indexGhost].classList.add('last');
 }
+
 
 function getRandomInt(path) {
     return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
@@ -202,30 +203,29 @@ function getOptimalPath(path, delEl) {
 function ghostMove() {
     let path = [0, 1, 2, 3, ];
     let delEl = [];
-    let saveIndex = indexGhost;
     getOptimalPath(path, delEl);
     switch (getRandomInt(path)) {
         case 0:
-            delGhost(saveIndex);
-            saveIndex = indexGhost;
+            // saveIndex1(-step);
+            delGhost();
             indexGhost += step;
             addGhost();
             break;
         case 1:
-            delGhost(saveIndex);
-            saveIndex = indexGhost;
+            // saveIndex2(step)
+            delGhost();
             indexGhost -= step;
             addGhost();
             break;
         case 2:
-            delGhost(saveIndex);
-            saveIndex = indexGhost;
+            // saveIndex3(1)
+            delGhost();
             indexGhost--;
             addGhost();
             break;
         case 3:
-            delGhost(saveIndex);
-            saveIndex = indexGhost;
+            // saveIndex4(-1)
+            delGhost();
             indexGhost++;
             addGhost();
             break;
