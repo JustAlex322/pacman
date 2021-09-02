@@ -161,8 +161,10 @@ grid[indexGhost].insertAdjacentElement(
     Ghost,
 )
 
-function delGhost() {
+function delGhost(index) {
+    grid[index].classList.remove('last');
     grid[indexGhost].querySelector('.ghost').remove();
+    grid[indexGhost].classList.add('last');
 }
 
 function getRandomInt(path) {
@@ -178,19 +180,19 @@ function addGhost() {
 
 function getOptimalPath(path, delEl) {
     let countDel = 0;
-    if (indexGhost + step >= grid.length || grid[indexGhost + step].classList.contains('wall')) { //вниз
+    if (indexGhost + step >= grid.length || grid[indexGhost + step].classList.contains('wall') || grid[indexGhost + step].classList.contains('last')) { //вниз
         delEl.push(Number(path.splice(countDel, 1)));
         countDel++;
     }
-    if (indexGhost - step < 0 || grid[indexGhost - step].classList.contains('wall')) { // вверх
+    if (indexGhost - step < 0 || grid[indexGhost - step].classList.contains('wall') || grid[indexGhost - step].classList.contains('last')) { // вверх
         delEl.push(Number(path.splice(1 - countDel, 1)));
         countDel++;
     }
-    if (indexGhost % step == 0 || grid[indexGhost - 1].classList.contains('wall')) { //влево
+    if (indexGhost % step == 0 || grid[indexGhost - 1].classList.contains('wall') || grid[indexGhost - 1].classList.contains('last')) { //влево
         delEl.push(Number(path.splice(2 - countDel, 1)));
         countDel++;
     }
-    if ((indexGhost + 1) % (step) == 0 || grid[indexGhost + 1].classList.contains('wall')) { // вправо
+    if ((indexGhost + 1) % (step) == 0 || grid[indexGhost + 1].classList.contains('wall') || grid[indexGhost + 1].classList.contains('last')) { // вправо
         delEl.push(Number(path.splice(3 - countDel, 1)));
         countDel++;
     }
@@ -200,25 +202,30 @@ function getOptimalPath(path, delEl) {
 function ghostMove() {
     let path = [0, 1, 2, 3, ];
     let delEl = [];
+    let saveIndex = indexGhost;
     getOptimalPath(path, delEl);
     switch (getRandomInt(path)) {
         case 0:
-            delGhost();
+            delGhost(saveIndex);
+            saveIndex = indexGhost;
             indexGhost += step;
             addGhost();
             break;
         case 1:
-            delGhost();
+            delGhost(saveIndex);
+            saveIndex = indexGhost;
             indexGhost -= step;
             addGhost();
             break;
         case 2:
-            delGhost();
+            delGhost(saveIndex);
+            saveIndex = indexGhost;
             indexGhost--;
             addGhost();
             break;
         case 3:
-            delGhost();
+            delGhost(saveIndex);
+            saveIndex = indexGhost;
             indexGhost++;
             addGhost();
             break;
