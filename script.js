@@ -60,7 +60,7 @@ let point = 0;
 
 
 function delPacman() {
-    grid[indexPacman].querySelector('.pacman').remove();
+    grid[indexPacman].classList.remove('pacman');
 }
 
 
@@ -70,7 +70,7 @@ function printCountPoint() {
 }
 
 function addPacman() {
-    grid[indexPacman].className = 'empty';
+    grid[indexPacman].classList.add('empty');
     grid[indexPacman].insertAdjacentElement(
         'afterbegin',
         pacMan,
@@ -193,9 +193,8 @@ function getOptimalPath(path, delEl) {
         delEl.push(Number(path.splice(2 - countDel, 1)));
         countDel++;
     }
-    if ((indexGhost + 1) % (step) == 0 || grid[indexGhost + 1].classList.contains('wall') || grid[indexGhost + 1].classList.contains('last')) { // вправо
+    if ((indexGhost + 1) % step == 0 || grid[indexGhost + 1].classList.contains('wall') || grid[indexGhost + 1].classList.contains('last')) { // вправо
         delEl.push(Number(path.splice(3 - countDel, 1)));
-        countDel++;
     }
 }
 
