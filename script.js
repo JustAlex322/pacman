@@ -70,6 +70,7 @@ function printCountPoint() {
 }
 
 function addPacman() {
+    grid[indexPacman].classList.remove('point');
     grid[indexPacman].classList.add('empty');
     grid[indexPacman].insertAdjacentElement(
         'afterbegin',
@@ -266,6 +267,9 @@ function game() {
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
+            setTimeout(function() {
+                location.reload();
+            }, 2000);
             return;
         }
         timerId3 = setTimeout(tick3, 0); // (*)
