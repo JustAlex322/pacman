@@ -64,27 +64,35 @@ body {
     }
 }
 
-.new-game {
-    // .new-game__content
-    position: absolute;
-    top: 50%;
-    left: 33%;
-    width: 500px;
-    height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    // visibility: hidden;
-    // opacity: 0;
-    &__content {}
-    .text {
-        font-size: 30px;
-        margin-bottom: 20px;
-    }
-    button {
-        width: 100%;
-        height: 50px;
+.new-game__popup {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.719);
+    top: 0;
+    left: 0;
+    .new-game {
+        // .new-game__content
+        position: absolute;
+        top: 50%;
+        left: 33%;
+        width: 500px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        &__content {}
+        .text {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            height: 50px;
+        }
     }
 }

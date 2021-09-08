@@ -151,7 +151,18 @@ body {
   background-color: black;
 }
 
-.new-game {
+.new-game__popup {
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.719);
+  top: 0;
+  left: 0;
+}
+
+.new-game__popup .new-game {
   position: absolute;
   top: 50%;
   left: 33%;
@@ -173,12 +184,12 @@ body {
   background-color: #fff;
 }
 
-.new-game .text {
+.new-game__popup .new-game .text {
   font-size: 30px;
   margin-bottom: 20px;
 }
 
-.new-game button {
+.new-game__popup .new-game button {
   width: 100%;
   height: 50px;
 }

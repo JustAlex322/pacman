@@ -277,3 +277,12 @@ function game() {
 }
 
 game();
+
+function newGame() {
+    document.querySelector('#btn').onclick = () => {
+        let styles = `visibility: visible;
+        opacity: 1;`;
+        let popup = document.querySelector('.new-game__popup').style = styles;
+    }
+
+}
