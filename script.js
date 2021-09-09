@@ -15,7 +15,7 @@ const level = [
 let grid = [];
 
 
-function createBoard() {
+function createBoard(level) {
     for (let i = 0; i < level.length; i++) {
         let block = document.createElement('div');
         switch (level[i]) {
@@ -33,7 +33,7 @@ function createBoard() {
         grid.push(block); //пригодится что бы дальше реализовать движение пакмена
     }
 }
-createBoard();
+createBoard(level);
 
 function getCountPoint() {
     let count = 0;
@@ -267,9 +267,16 @@ function game() {
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
-            setTimeout(function() {
-                location.reload();
-            }, 2000);
+            setTimeout(() => {
+                if (f == 1) {
+                    let styles = `visibility: visible;
+                    opacity: 1;`;
+                    let popup = document.querySelector('.new-game__popup').style = styles;
+                    document.querySelector('#btn').onclick = () => {
+                        location.reload();
+                    }
+                }
+            }, 200);
             return;
         }
         timerId3 = setTimeout(tick3, 0); // (*)
@@ -277,12 +284,3 @@ function game() {
 }
 
 game();
-
-function newGame() {
-    document.querySelector('#btn').onclick = () => {
-        let styles = `visibility: visible;
-        opacity: 1;`;
-        let popup = document.querySelector('.new-game__popup').style = styles;
-    }
-
-}

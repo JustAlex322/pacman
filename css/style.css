@@ -160,14 +160,16 @@ body {
   background-color: rgba(0, 0, 0, 0.719);
   top: 0;
   left: 0;
+  -webkit-transition: all ease 1s;
+  transition: all ease 1s;
 }
 
 .new-game__popup .new-game {
   position: absolute;
-  top: 50%;
-  left: 33%;
+  top: 40%;
+  left: 35%;
   width: 500px;
-  height: 100px;
+  height: 170px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -192,5 +194,6 @@ body {
 .new-game__popup .new-game button {
   width: 100%;
   height: 50px;
+  font-size: 25px;
 }
 /*# sourceMappingURL=style.css.map */
