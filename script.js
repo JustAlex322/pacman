@@ -1,8 +1,10 @@
-const board = document.querySelector('#game-board');
+const board = document.querySelector('.game-board');
 const score = document.querySelector('#score');
 
 let flag = false;
 let step = 6;
+
+
 
 const level = [
     2, 1, 1, 1, 1, 0,
@@ -14,170 +16,22 @@ const level = [
 
 let grid = [];
 
-
-function createBoard(level) {
-    for (let i = 0; i < level.length; i++) {
-        let block = document.createElement('div');
-        switch (level[i]) {
-            case 0:
-                block.classList.add('wall');
-                break;
-            case 1:
-                block.classList.add('point');
-                break;
-        }
-        board.insertAdjacentElement(
-            'beforeend',
-            block,
-        )
-        grid.push(block); //пригодится что бы дальше реализовать движение пакмена
-    }
-}
 createBoard(level);
 
-function getCountPoint() {
-    let count = 0;
-    for (let i = 0; i < level.length; i++) {
-        count += level[i] == 1;
-    }
-    return count;
-}
-
-let countPoint = getCountPoint();
-
-
-
-let indexPacman = 0;
-let pacMan = document.createElement('img');
-pacMan.src = "img/pacman2.jpg";
-pacMan.classList.add('pacman');
-grid[indexPacman].insertAdjacentElement(
-    'afterbegin',
-    pacMan,
-)
-
+const ghost = createGhost("img/ghost1.jpg");
 let point = 0;
-
-
-function delPacman() {
-    grid[indexPacman].classList.remove('pacman');
-}
-
-
-function printCountPoint() {
+let printCountPoint = () => {
     point += grid[indexPacman].classList.contains('point');
     score.textContent = point;
-}
-
-function addPacman() {
-    grid[indexPacman].classList.remove('point');
-    grid[indexPacman].classList.add('empty');
-    grid[indexPacman].insertAdjacentElement(
-        'afterbegin',
-        pacMan,
-    )
-
-}
-
-function autoMovePacman() {
-    if (level[indexPacman + 1] != 0 && (indexPacman + 1) % (step) != 0) {
-        delPacman();
-        indexPacman++;
-        printCountPoint();
-        addPacman();
-    }
 }
 
 let flag3 = false;
 document.addEventListener('keydown', userMove);
 
-function movePacman() {
-    if (!flag3) {
-        autoMovePacman();
-    }
-    flag3 = false;
-}
-
-
-function getUserChoose(e) {
-    switch (e.key) {
-        case 'ArrowDown':
-            return 0;
-        case 'ArrowUp':
-            return 1;
-        case 'ArrowLeft':
-            return 2;
-        case 'ArrowRight':
-            return 3;
-    }
-}
-
-
-
-function userMove(e) {
-    flag3 = true;
-    switch (getUserChoose(e)) {
-        case 0:
-            if (!grid[indexPacman + step].classList.contains('wall') && indexPacman + step < grid.length) { // шаг вниз
-                delPacman();
-                indexPacman += step;
-                printCountPoint();
-                addPacman();
-            }
-            break;
-        case 1:
-            if (!grid[indexPacman - step].classList.contains('wall') && indexPacman >= 6) { // шаг вверх
-                delPacman();
-                indexPacman -= step;
-                printCountPoint();
-                addPacman();
-            }
-            break;
-        case 2:
-            if (!grid[indexPacman - 1].classList.contains('wall') && indexPacman % step != 0) { // шаг влелво
-                delPacman();
-                indexPacman--;
-                printCountPoint();
-                addPacman();
-            }
-            break;
-        case 3:
-            if (!grid[indexPacman + 1].classList.contains('wall') && (indexPacman + 1) % (step) != 0) { // шаг вправо
-                delPacman();
-                indexPacman++;
-                printCountPoint();
-                addPacman();
-            }
-            break;
-    }
-}
 // призраки
-
-let indexGhost = 24;
-let Ghost = document.createElement('img');
-Ghost.src = "img/ghost1.jpg";
-Ghost.classList.add('ghost');
-grid[indexGhost].insertAdjacentElement(
-    'afterbegin',
-    Ghost,
-)
-
-function delGhost(index) {
-    document.querySelector('.last').classList.remove('last');
-    grid[indexGhost].querySelector('.ghost').remove();
-    grid[indexGhost].classList.add('last');
-}
-
 
 function getRandomInt(path) {
     return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
-}
-
-function addGhost() {
-    grid[indexGhost].insertAdjacentElement(
-        'afterbegin',
-        Ghost,
-    )
 }
 
 function getOptimalPath(path, delEl) {
@@ -199,48 +53,19 @@ function getOptimalPath(path, delEl) {
     }
 }
 
-
-function ghostMove() {
-    let path = [0, 1, 2, 3, ];
-    let delEl = [];
-    getOptimalPath(path, delEl);
-    switch (getRandomInt(path)) {
-        case 0:
-            // saveIndex1(-step);
-            delGhost();
-            indexGhost += step;
-            addGhost();
-            break;
-        case 1:
-            // saveIndex2(step)
-            delGhost();
-            indexGhost -= step;
-            addGhost();
-            break;
-        case 2:
-            // saveIndex3(1)
-            delGhost();
-            indexGhost--;
-            addGhost();
-            break;
-        case 3:
-            // saveIndex4(-1)
-            delGhost();
-            indexGhost++;
-            addGhost();
-            break;
+function getCountPoint() {
+    let count = 0;
+    for (let i = 0; i < level.length; i++) {
+        count += level[i] == 1;
     }
-    for (let i = 0; i < delEl.length; i++) {
-        path.splice(delEl[i], 0, delEl[i])
-    }
-    delEl.splice(0, delEl.length);
+    return count;
 }
 
-
+let countPoint = getCountPoint();
 
 function checkLose() {
     if (point == countPoint) {
-        Ghost.style.display = 'none';
+        ghost.style.display = 'none';
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
         return 0;
     } else if (indexPacman == indexGhost) {
@@ -250,6 +75,20 @@ function checkLose() {
     }
     return 2;
 }
+
+function showPopup(atribute) {
+    let styles = `visibility: visible;
+            opacity: 1;`;
+    document.querySelector(`${atribute}`).style = styles;
+}
+
+const pacMan = document.createElement('img');
+pacMan.src = "img/pacman2.jpg";
+pacMan.classList.add('pacman');
+grid[indexPacman].insertAdjacentElement(
+    'afterbegin',
+    pacMan,
+)
 
 function game() {
     let timerId = setTimeout(function tick() {
@@ -269,9 +108,7 @@ function game() {
             clearTimeout(timerId3);
             setTimeout(() => {
                 if (f == 1) {
-                    let styles = `visibility: visible;
-                    opacity: 1;`;
-                    let popup = document.querySelector('.new-game__popup').style = styles;
+                    showPopup('#lose');
                     document.querySelector('#btn').onclick = () => {
                         location.reload();
                     }
@@ -284,3 +121,14 @@ function game() {
 }
 
 game();
+
+function newLevel() {
+    const level = [
+        2, 1, 1, 1, 1, 1,
+        1, 1, 0, 1, 1, 1,
+        1, 1, 0, 1, 1, 1,
+        1, 1, 0, 1, 1, 1,
+        1, 1, 0, 1, 1, 1,
+    ];
+    createBoard(level);
+}

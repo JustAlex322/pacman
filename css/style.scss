@@ -15,7 +15,7 @@ body {
     }
 }
 
-#game-board {
+.game-board {
     position: absolute;
     bottom: -20px;
     left: 550px;
@@ -64,7 +64,7 @@ body {
     }
 }
 
-.new-game__popup {
+.popup {
     visibility: hidden;
     opacity: 0;
     position: fixed;
@@ -74,7 +74,7 @@ body {
     top: 0;
     left: 0;
     transition: all ease 1s;
-    .new-game {
+    &-content {
         // .new-game__content
         position: absolute;
         top: 40%;
@@ -86,7 +86,6 @@ body {
         justify-content: center;
         align-items: center;
         background-color: #fff;
-        &__content {}
         .text {
             font-size: 30px;
             margin-bottom: 20px;

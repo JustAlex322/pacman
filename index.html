@@ -11,16 +11,25 @@
 
 <body>
     <div class="wrapper">
-        <div id="game-board"></div>
+        <div class="game-board"></div>
         <h2>SCORE : <span id="score" class="last">0</span></h2>
 
         <!-- начать новую игру? -->
 
 
     </div>
-    <div class="new-game__popup">
-        <div class="new-game">
-            <div class="new-game__content">
+    <div class="popup" id="lose">
+        <div class="popup-content">
+            <h2 class="text">
+                Билли ОЧЕНЬ вами разочарован.... <br> Вы хотите попробовать еще раз ??
+            </h2>
+            <button id="btn">OH YES SIR!!!</button>
+        </div>
+    </div>
+
+    <div class="popup" id="win">
+        <div class="popup-content">
+            <div class="new-level__content">
                 <h2 class="text">
                     Билли ОЧЕНЬ вами разочарован.... <br> Вы хотите попробовать еще раз ??
                 </h2>
@@ -28,6 +37,9 @@
             </div>
         </div>
     </div>
+    <script src="board.js"></script>
+    <script src="pacman.js"></script>
+    <script src="ghost.js"></script>
     <script src="script.js"></script>
 </body>
 
