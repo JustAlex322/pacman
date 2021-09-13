@@ -1,4 +1,4 @@
-function createBoard(level) {
+function createBoard(level, grid) {
     for (let i = 0; i < level.length; i++) {
         let block = document.createElement('div');
         switch (level[i]) {

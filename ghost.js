@@ -1,57 +1,48 @@
-let indexGhost = 24;
+let ghost = new Characters(24);
 
-function createGhost(src) {
-    let ghost = document.createElement('img');
-    ghost.src = `${src}`;
-    ghost.classList.add('ghost');
-    grid[indexGhost].insertAdjacentElement(
-        'afterbegin',
-        ghost,
-    );
-    return ghost;
-}
 
-function addGhost() {
-    grid[indexGhost].insertAdjacentElement(
+
+function addGhost(ghost) {
+    grid[ghost.index].insertAdjacentElement(
         'afterbegin',
-        ghost,
+        ghost.name,
     )
 }
 
-function delGhost() {
+function delGhost(ghost) {
     document.querySelector('.last').classList.remove('last');
-    grid[indexGhost].querySelector('.ghost').remove();
-    grid[indexGhost].classList.add('last');
+    grid[ghost.index].querySelector('.ghost').remove();
+    grid[ghost.index].classList.add('last');
 }
 
-function ghostMove() {
+function ghostMove(ghost) {
     let path = [0, 1, 2, 3, ];
     let delEl = [];
-    getOptimalPath(path, delEl);
+    getOptimalPath(ghost, path, delEl);
     switch (getRandomInt(path)) {
         case 0:
             // saveIndex1(-step);
-            delGhost();
-            indexGhost += step;
-            addGhost();
+            delGhost(ghost);
+            ghost.index += step;
+            addGhost(ghost);
             break;
         case 1:
             // saveIndex2(step)
-            delGhost();
-            indexGhost -= step;
-            addGhost();
+            delGhost(ghost);
+            ghost.index -= step;
+            addGhost(ghost);
             break;
         case 2:
             // saveIndex3(1)
-            delGhost();
-            indexGhost--;
-            addGhost();
+            delGhost(ghost);
+            ghost.index--;
+            addGhost(ghost);
             break;
         case 3:
             // saveIndex4(-1)
-            delGhost();
-            indexGhost++;
-            addGhost();
+            delGhost(ghost);
+            ghost.index++;
+            addGhost(ghost);
             break;
     }
     for (let i = 0; i < delEl.length; i++) {
