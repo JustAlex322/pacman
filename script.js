@@ -1,8 +1,10 @@
 const board = document.querySelector('.game-board');
 const score = document.querySelector('#score');
 const step = 6;
+let point = 0;
+let flag = false;
 
-const level = [
+const level1 = [
     2, 1, 1, 1, 1, 0,
     1, 1, 0, 1, 1, 0,
     1, 1, 0, 1, 1, 0,
@@ -10,30 +12,26 @@ const level = [
     1, 1, 0, 1, 1, 0,
 ];
 
-let grid = [];
+const level2 = [
+    2, 1, 1, 1, 1, 1,
+    1, 1, 0, 1, 1, 1,
+    1, 1, 0, 1, 1, 1,
+    1, 1, 0, 1, 1, 1,
+    1, 1, 0, 1, 1, 1,
+]
 
-createBoard(level, grid);
-// pacman.createPacman(grid);
-pacman.createCharacter("img/pacman2.jpg", "pacman", grid);
 
-ghost.createCharacter("img/ghost1.jpg", "ghost", grid);
-
-let point = 0;
-let printCountPoint = (pacman) => {
+let printCountPoint = (pacman, grid) => {
     point += grid[pacman.index].classList.contains('point');
     score.textContent = point;
 }
 
-let flag3 = false;
-document.addEventListener('keydown', (e) => userMove(e, pacman));
-
-// призраки
 
 function getRandomInt(path) {
     return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
 }
 
-function getOptimalPath(ghost, path, delEl) {
+function getOptimalPath(ghost, grid, path, delEl) {
     let countDel = 0;
     if (ghost.index + step >= grid.length || grid[ghost.index + step].classList.contains('wall') || grid[ghost.index + step].classList.contains('last')) { //вниз
         delEl.push(Number(path.splice(countDel, 1)));
@@ -52,17 +50,16 @@ function getOptimalPath(ghost, path, delEl) {
     }
 }
 
-function getCountPoint() {
+function getCountPoint(level1) {
     let count = 0;
-    for (let i = 0; i < level.length; i++) {
-        count += level[i] == 1;
+    for (let i = 0; i < level1.length; i++) {
+        count += level1[i] == 1;
     }
     return count;
 }
 
-let countPoint = getCountPoint();
 
-function checkLose(pacman, ghost) {
+function checkLose(pacman, ghost, point, countPoint) {
     if (point == countPoint) {
         ghost.name.style.display = 'none';
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
@@ -82,17 +79,26 @@ function showPopup(atribute) {
 }
 
 
-function game(pacman, ghost) {
+function game(pacman, ghost, level1) {
+    let grid = [];
+    createBoard(level1, grid);
+    pacman.createCharacter("img/pacman2.jpg", "pacman", grid);
+    ghost.createCharacter("img/ghost1.jpg", "ghost", grid);
+
+    document.addEventListener('keydown', (e) => userMove(e, pacman, grid));
+
+    let countPoint = getCountPoint(level1);
+
     let timerId = setTimeout(function tick() {
-        movePacman(pacman);
+        movePacman(pacman, level1, grid);
         timerId = setTimeout(tick, 800); // (*)
     }, 800);
     let timerId2 = setTimeout(function tick2() {
-        ghostMove(ghost);
+        ghostMove(ghost, grid);
         timerId2 = setTimeout(tick2, 800); // (*)
     }, 800);
     let timerId3 = setTimeout(function tick3() {
-        let f = checkLose(pacman, ghost);
+        let f = checkLose(pacman, ghost, point, countPoint);
         if (f == 0 || f == 1) {
             document.removeEventListener('keydown', userMove);
             clearTimeout(timerId);
@@ -104,12 +110,17 @@ function game(pacman, ghost) {
                     document.querySelector('#btn').onclick = () => {
                         location.reload();
                     }
+                } else {
+                    while (board.firstChild) {
+                        board.firstChild.remove()
+                    }
+                    createBoard(level2, [])
                 }
             }, 200);
             return;
         }
-        timerId3 = setTimeout(tick3, 0); // (*)
+        timerId3 = setTimeout(tick3, 0);
     }, 50);
 }
 
-game(pacman, ghost);
+game(pacman, ghost, level1);

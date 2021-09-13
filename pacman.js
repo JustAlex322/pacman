@@ -13,17 +13,12 @@ class Characters {
         )
     }
 
-    voice() {
-        alert('voice')
-    }
 
 }
 
 let pacman = new Characters(0);
 
-console.log(pacman);
-
-function addPacman(pacman) {
+function addPacman(pacman, grid) {
     grid[pacman.index].classList.remove('point');
     grid[pacman.index].classList.add('empty');
     grid[pacman.index].insertAdjacentElement(
@@ -32,24 +27,24 @@ function addPacman(pacman) {
     )
 }
 
-function delPacman(pacman) {
+function delPacman(pacman, grid) {
     grid[pacman.index].classList.remove('pacman');
 }
 
-function autoMovePacman(pacman) {
+function autoMovePacman(pacman, level, grid) {
     if (level[pacman.index + 1] != 0 && (pacman.index + 1) % (step) != 0) {
-        delPacman(pacman);
+        delPacman(pacman, grid);
         pacman.index++;
-        printCountPoint(pacman);
-        addPacman(pacman);
+        printCountPoint(pacman, grid);
+        addPacman(pacman, grid);
     }
 }
 
-function movePacman(pacman) {
-    if (!flag3) {
-        autoMovePacman(pacman);
+function movePacman(pacman, level, grid) {
+    if (!flag) {
+        autoMovePacman(pacman, level, grid);
     }
-    flag3 = false;
+    flag = false;
 }
 
 
@@ -68,39 +63,39 @@ function getUserChoose(e) {
 
 
 
-function userMove(e, pacman) {
-    flag3 = true;
+function userMove(e, pacman, grid) {
+    flag = true;
     switch (getUserChoose(e)) {
         case 0:
             if (!grid[pacman.index + step].classList.contains('wall') && pacman.index + step < grid.length) { // шаг вниз
-                delPacman(pacman);
+                delPacman(pacman, grid);
                 pacman.index += step;
-                printCountPoint(pacman);
-                addPacman(pacman);
+                printCountPoint(pacman, grid);
+                addPacman(pacman, grid);
             }
             break;
         case 1:
             if (!grid[pacman.index - step].classList.contains('wall') && pacman.index >= 6) { // шаг вверх
-                delPacman(pacman);
+                delPacman(pacman, grid);
                 pacman.index -= step;
-                printCountPoint(pacman);
-                addPacman(pacman);
+                printCountPoint(pacman, grid);
+                addPacman(pacman, grid);
             }
             break;
         case 2:
             if (!grid[pacman.index - 1].classList.contains('wall') && pacman.index % step != 0) { // шаг влелво
-                delPacman(pacman);
+                delPacman(pacman, grid);
                 pacman.index--;
-                printCountPoint(pacman);
-                addPacman(pacman);
+                printCountPoint(pacman, grid);
+                addPacman(pacman, grid);
             }
             break;
         case 3:
             if (!grid[pacman.index + 1].classList.contains('wall') && (pacman.index + 1) % (step) != 0) { // шаг вправо
-                delPacman(pacman);
+                delPacman(pacman, grid);
                 pacman.index++;
-                printCountPoint(pacman);
-                addPacman(pacman);
+                printCountPoint(pacman, grid);
+                addPacman(pacman, grid);
             }
             break;
     }
