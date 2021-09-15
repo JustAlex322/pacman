@@ -4,17 +4,20 @@ class Characters {
         this.name = document.createElement('img');
     }
 
-    createCharacter(src, classN, grid) {
+    createCharacter(src, classN, ) {
         this.name.src = `${src}`;
         this.name.classList.add(`${classN}`);
+    }
+
+    addCharacterInGame(grid) {
         grid[this.index].insertAdjacentElement(
             'afterbegin',
             this.name,
         )
     }
 
-
 }
+
 
 let pacman = new Characters(0);
 
@@ -67,7 +70,7 @@ function userMove(e, pacman, grid) {
     flag = true;
     switch (getUserChoose(e)) {
         case 0:
-            if (!grid[pacman.index + step].classList.contains('wall') && pacman.index + step < grid.length) { // шаг вниз
+            if (pacman.index + step < grid.length && !grid[pacman.index + step].classList.contains('wall')) { // шаг вниз
                 delPacman(pacman, grid);
                 pacman.index += step;
                 printCountPoint(pacman, grid);
@@ -75,7 +78,7 @@ function userMove(e, pacman, grid) {
             }
             break;
         case 1:
-            if (!grid[pacman.index - step].classList.contains('wall') && pacman.index >= 6) { // шаг вверх
+            if (pacman.index >= 6 && !grid[pacman.index - step].classList.contains('wall')) { // шаг вверх
                 delPacman(pacman, grid);
                 pacman.index -= step;
                 printCountPoint(pacman, grid);
@@ -83,7 +86,7 @@ function userMove(e, pacman, grid) {
             }
             break;
         case 2:
-            if (!grid[pacman.index - 1].classList.contains('wall') && pacman.index % step != 0) { // шаг влелво
+            if (pacman.index % step != 0 && !grid[pacman.index - 1].classList.contains('wall')) { // шаг влелво
                 delPacman(pacman, grid);
                 pacman.index--;
                 printCountPoint(pacman, grid);
@@ -91,7 +94,7 @@ function userMove(e, pacman, grid) {
             }
             break;
         case 3:
-            if (!grid[pacman.index + 1].classList.contains('wall') && (pacman.index + 1) % (step) != 0) { // шаг вправо
+            if ((pacman.index + 1) % (step) != 0 && !grid[pacman.index + 1].classList.contains('wall')) { // шаг вправо
                 delPacman(pacman, grid);
                 pacman.index++;
                 printCountPoint(pacman, grid);

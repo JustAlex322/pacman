@@ -50,10 +50,10 @@ function getOptimalPath(ghost, grid, path, delEl) {
     }
 }
 
-function getCountPoint(level1) {
+function getCountPoint(level) {
     let count = 0;
-    for (let i = 0; i < level1.length; i++) {
-        count += level1[i] == 1;
+    for (let i = 0; i < level.length; i++) {
+        count += level[i] == 1;
     }
     return count;
 }
@@ -77,50 +77,74 @@ function showPopup(atribute) {
             opacity: 1;`;
     document.querySelector(`${atribute}`).style = styles;
 }
+let f = true;;
+let timerId3 = true;
+pacman.createCharacter("img/pacman2.jpg", "pacman");
+ghost.createCharacter("img/ghost1.jpg", "ghost");
 
 
-function game(pacman, ghost, level1) {
+
+function game(pacman, ghost, level) {
     let grid = [];
-    createBoard(level1, grid);
-    pacman.createCharacter("img/pacman2.jpg", "pacman", grid);
-    ghost.createCharacter("img/ghost1.jpg", "ghost", grid);
+    createBoard(level, grid);
+    pacman.addCharacterInGame(grid);
+    ghost.addCharacterInGame(grid);
 
-    document.addEventListener('keydown', (e) => userMove(e, pacman, grid));
+    function listener(e) {
+        userMove(e, pacman, grid)
+    }
+    document.addEventListener('keydown', listener);
 
-    let countPoint = getCountPoint(level1);
+    let countPoint = getCountPoint(level);
 
     let timerId = setTimeout(function tick() {
-        movePacman(pacman, level1, grid);
+        movePacman(pacman, level, grid);
         timerId = setTimeout(tick, 800); // (*)
     }, 800);
     let timerId2 = setTimeout(function tick2() {
         ghostMove(ghost, grid);
         timerId2 = setTimeout(tick2, 800); // (*)
     }, 800);
-    let timerId3 = setTimeout(function tick3() {
-        let f = checkLose(pacman, ghost, point, countPoint);
+    timerId3 = setTimeout(function tick3() {
+        f = checkLose(pacman, ghost, point, countPoint);
         if (f == 0 || f == 1) {
-            document.removeEventListener('keydown', userMove);
+            document.removeEventListener('keydown', listener);
+
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
+            timerId3 = false
             setTimeout(() => {
                 if (f == 1) {
                     showPopup('#lose');
                     document.querySelector('#btn').onclick = () => {
                         location.reload();
                     }
-                } else {
-                    while (board.firstChild) {
-                        board.firstChild.remove()
-                    }
-                    createBoard(level2, [])
                 }
             }, 200);
             return;
         }
         timerId3 = setTimeout(tick3, 0);
     }, 50);
+    return;
 }
 
 game(pacman, ghost, level1);
+
+// онклик новый левел!!!!
+let timerWin = setTimeout(function win() {
+    if (!timerId3 && !f) {
+        flag = false;
+        clearTimeout(timerWin);
+        score.classList.add('last');
+        while (board.firstChild) {
+            board.removeChild(board.firstChild);
+        }
+        point = 0;
+        pacman.index = 0;
+        ghost.index = 24;
+        game(pacman, ghost, level2);
+        return;
+    }
+    timerWin = setTimeout(win, 0);
+}, 0);
