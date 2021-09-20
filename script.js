@@ -134,17 +134,23 @@ game(pacman, ghost, level1);
 // онклик новый левел!!!!
 let timerWin = setTimeout(function win() {
     if (!timerId3 && !f) {
-        flag = false;
-        clearTimeout(timerWin);
-        score.classList.add('last');
-        while (board.firstChild) {
-            board.removeChild(board.firstChild);
-        }
-        point = 0;
-        pacman.index = 0;
-        ghost.index = 24;
-        game(pacman, ghost, level2);
-        return;
+        showPopup('#win');
     }
     timerWin = setTimeout(win, 0);
 }, 0);
+
+
+const btnWin = document.querySelector('#btn-win');
+btnWin.onclick = () => {
+    btnWin.classList.add('popup');
+    flag = false;
+    clearTimeout(timerWin);
+    score.classList.add('last');
+    while (board.firstChild) {
+        board.removeChild(board.firstChild);
+    }
+    point = 0;
+    pacman.index = 0;
+    ghost.index = 24;
+    game(pacman, ghost, level2);
+}
