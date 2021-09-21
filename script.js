@@ -72,11 +72,7 @@ function checkLose(pacman, ghost, point, countPoint) {
     return 2;
 }
 
-function showPopup(atribute) {
-    let styles = `visibility: visible;
-            opacity: 1;`;
-    document.querySelector(`${atribute}`).style = styles;
-}
+
 let f = true;;
 let timerId3 = true;
 pacman.createCharacter("img/pacman2.jpg", "pacman");
@@ -84,7 +80,7 @@ ghost.createCharacter("img/ghost1.jpg", "ghost");
 
 
 
-function game(pacman, ghost, level) {
+function game(pacman, ghost, level, speedGhost) {
     let grid = [];
     createBoard(level, grid);
     pacman.addCharacterInGame(grid);
@@ -103,7 +99,7 @@ function game(pacman, ghost, level) {
     }, 800);
     let timerId2 = setTimeout(function tick2() {
         ghostMove(ghost, grid);
-        timerId2 = setTimeout(tick2, 800); // (*)
+        timerId2 = setTimeout(tick2, speedGhost); // (*)
     }, 800);
     timerId3 = setTimeout(function tick3() {
         f = checkLose(pacman, ghost, point, countPoint);
@@ -116,7 +112,7 @@ function game(pacman, ghost, level) {
             timerId3 = false
             setTimeout(() => {
                 if (f == 1) {
-                    showPopup('#lose');
+                    document.querySelector('#lose').classList.add('open');
                     document.querySelector('#btn').onclick = () => {
                         location.reload();
                     }
@@ -129,20 +125,19 @@ function game(pacman, ghost, level) {
     return;
 }
 
-game(pacman, ghost, level1);
+game(pacman, ghost, level1, 800);
 
 // онклик новый левел!!!!
 let timerWin = setTimeout(function win() {
     if (!timerId3 && !f) {
-        showPopup('#win');
+        document.querySelector('#win').classList.add('open');
     }
     timerWin = setTimeout(win, 0);
 }, 0);
 
 
-const btnWin = document.querySelector('#btn-win');
-btnWin.onclick = () => {
-    btnWin.classList.add('popup');
+document.querySelector('#btn-win').onclick = () => {
+    document.querySelector('#win').classList.add('close');
     flag = false;
     clearTimeout(timerWin);
     score.classList.add('last');
@@ -152,5 +147,6 @@ btnWin.onclick = () => {
     point = 0;
     pacman.index = 0;
     ghost.index = 24;
-    game(pacman, ghost, level2);
+    ghost.name.style.display = 'block';
+    game(pacman, ghost, level2, 400);
 }
