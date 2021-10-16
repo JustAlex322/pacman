@@ -5,24 +5,24 @@ let point = 0;
 let flag = false;
 
 const level1 = [
-    2, 1, 1, 1, 1, 0,
-    1, 1, 0, 1, 1, 0,
-    1, 1, 0, 1, 1, 0,
-    1, 1, 0, 1, 1, 0,
-    1, 1, 0, 1, 1, 0,
+    [2, 1, 1, 1, 1, 0],
+    [1, 1, 0, 1, 1, 0],
+    [1, 1, 0, 1, 1, 0],
+    [1, 1, 0, 1, 1, 0],
+    [1, 1, 0, 1, 1, 0],
 ];
 
 const level2 = [
-    2, 1, 1, 1, 1, 1,
-    1, 1, 0, 1, 1, 1,
-    1, 1, 0, 1, 1, 1,
-    1, 1, 0, 1, 1, 1,
-    1, 1, 0, 1, 1, 1,
+    [2, 1, 1, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
+    [1, 1, 0, 1, 1, 1],
 ]
 
 
 let printCountPoint = (pacman, grid) => {
-    point += grid[pacman.index].classList.contains('point');
+    point += grid[pacman.indexY][pacman.indexX].classList.contains('point');
     score.textContent = point;
 }
 
@@ -33,19 +33,19 @@ function getRandomInt(path) {
 
 function getOptimalPath(ghost, grid, path, delEl) {
     let countDel = 0;
-    if (ghost.index + step >= grid.length || grid[ghost.index + step].classList.contains('wall') || grid[ghost.index + step].classList.contains('last')) { //вниз
+    if (ghost.indexY + 1 >= grid.length - 1 || grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') || grid[ghost.indexY + 1][ghost.indexX].classList.contains('last')) { //вниз
         delEl.push(Number(path.splice(countDel, 1)));
         countDel++;
     }
-    if (ghost.index - step < 0 || grid[ghost.index - step].classList.contains('wall') || grid[ghost.index - step].classList.contains('last')) { // вверх
+    if (ghost.indexY - 1 < 0 || grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') || grid[ghost.indexY - 1][ghost.indexX].classList.contains('last')) { // вверх
         delEl.push(Number(path.splice(1 - countDel, 1)));
         countDel++;
     }
-    if (ghost.index % step == 0 || grid[ghost.index - 1].classList.contains('wall') || grid[ghost.index - 1].classList.contains('last')) { //влево
+    if (ghost.indexX - 1 < 0 || grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') || grid[ghost.indexY][ghost.indexX - 1].classList.contains('last')) { //влево
         delEl.push(Number(path.splice(2 - countDel, 1)));
         countDel++;
     }
-    if ((ghost.index + 1) % step == 0 || grid[ghost.index + 1].classList.contains('wall') || grid[ghost.index + 1].classList.contains('last')) { // вправо
+    if ((ghost.indexX + 1) > grid.length - 1 || grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') || grid[ghost.indexY][ghost.indexX + 1].classList.contains('last')) { // вправо
         delEl.push(Number(path.splice(3 - countDel, 1)));
     }
 }
@@ -53,7 +53,9 @@ function getOptimalPath(ghost, grid, path, delEl) {
 function getCountPoint(level) {
     let count = 0;
     for (let i = 0; i < level.length; i++) {
-        count += level[i] == 1;
+        for (let j = 0; j < level[i].length; j++) {
+            count += level[i][j] == 1;
+        }
     }
     return count;
 }
@@ -64,7 +66,7 @@ function checkLose(pacman, ghost, point, countPoint) {
         ghost.name.style.display = 'none';
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
         return 0;
-    } else if (pacman.index == ghost.index) {
+    } else if (pacman.indexY == ghost.indexY && pacman.indexX == ghost.indexX) {
         pacman.name.style.display = 'none';
         setTimeout(() => alert('Ты ЖАЛОК'), 100)
         return 1;
@@ -83,7 +85,7 @@ ghost.createCharacter("img/ghost1.jpg", "ghost");
 function game(pacman, ghost, level, speedGhost) {
     let grid = [];
     createBoard(level, grid);
-    pacman.addCharacterInGame(grid);
+    pacman.addCharacterInGame(grid, pacman);
     ghost.addCharacterInGame(grid);
 
     function listener(e) {
@@ -94,7 +96,7 @@ function game(pacman, ghost, level, speedGhost) {
     let countPoint = getCountPoint(level);
 
     let timerId = setTimeout(function tick() {
-        movePacman(pacman, level, grid);
+        movePacman(pacman, grid);
         timerId = setTimeout(tick, 800); // (*)
     }, 800);
     let timerId2 = setTimeout(function tick2() {
@@ -145,8 +147,10 @@ document.querySelector('#btn-win').onclick = () => {
         board.removeChild(board.firstChild);
     }
     point = 0;
-    pacman.index = 0;
-    ghost.index = 24;
+    pacman.indexX = 1;
+    pacman.indexY = 4;
+    ghost.indexY = 0;
+    pacman.indexX = 0;
     ghost.name.style.display = 'block';
     game(pacman, ghost, level2, 400);
 }
