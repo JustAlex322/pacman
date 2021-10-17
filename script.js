@@ -27,28 +27,6 @@ let printCountPoint = (pacman, grid) => {
 }
 
 
-function getRandomInt(path) {
-    return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
-}
-
-function getOptimalPath(ghost, grid, path, delEl) {
-    let countDel = 0;
-    if (ghost.indexY + 1 >= grid.length - 1 || grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') || grid[ghost.indexY + 1][ghost.indexX].classList.contains('last')) { //вниз
-        delEl.push(Number(path.splice(countDel, 1)));
-        countDel++;
-    }
-    if (ghost.indexY - 1 < 0 || grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') || grid[ghost.indexY - 1][ghost.indexX].classList.contains('last')) { // вверх
-        delEl.push(Number(path.splice(1 - countDel, 1)));
-        countDel++;
-    }
-    if (ghost.indexX - 1 < 0 || grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') || grid[ghost.indexY][ghost.indexX - 1].classList.contains('last')) { //влево
-        delEl.push(Number(path.splice(2 - countDel, 1)));
-        countDel++;
-    }
-    if ((ghost.indexX + 1) > grid.length - 1 || grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') || grid[ghost.indexY][ghost.indexX + 1].classList.contains('last')) { // вправо
-        delEl.push(Number(path.splice(3 - countDel, 1)));
-    }
-}
 
 function getCountPoint(level) {
     let count = 0;
@@ -82,7 +60,14 @@ ghost.createCharacter("img/ghost1.jpg", "ghost");
 
 
 
-function game(pacman, ghost, level, speedGhost) {
+function game(pacman, ghost, speedGhost) {
+    board.style.width = 15 * 66 + 'px';
+    board.style.height = 15 * 66 + 'px';
+    let level = {
+        countPoint: 0,
+        matr: null,
+    }
+    level.matr = createLab(15, 15);
     let grid = [];
     createBoard(level, grid);
     pacman.addCharacterInGame(grid, pacman);
@@ -93,21 +78,19 @@ function game(pacman, ghost, level, speedGhost) {
     }
     document.addEventListener('keydown', listener);
 
-    let countPoint = getCountPoint(level);
 
     let timerId = setTimeout(function tick() {
-        movePacman(pacman, grid);
-        timerId = setTimeout(tick, 800); // (*)
-    }, 800);
+        autoMovePacman(pacman, grid);
+        timerId = setTimeout(tick, 600); // (*)
+    }, 600);
     let timerId2 = setTimeout(function tick2() {
         ghostMove(ghost, grid);
         timerId2 = setTimeout(tick2, speedGhost); // (*)
     }, 800);
     timerId3 = setTimeout(function tick3() {
-        f = checkLose(pacman, ghost, point, countPoint);
+        f = checkLose(pacman, ghost, point, level.countPoint);
         if (f == 0 || f == 1) {
             document.removeEventListener('keydown', listener);
-
             clearTimeout(timerId);
             clearTimeout(timerId2);
             clearTimeout(timerId3);
@@ -127,7 +110,7 @@ function game(pacman, ghost, level, speedGhost) {
     return;
 }
 
-game(pacman, ghost, level1, 800);
+game(pacman, ghost, 800);
 
 // онклик новый левел!!!!
 let timerWin = setTimeout(function win() {
@@ -152,5 +135,5 @@ document.querySelector('#btn-win').onclick = () => {
     ghost.indexY = 0;
     pacman.indexX = 0;
     ghost.name.style.display = 'block';
-    game(pacman, ghost, level2, 400);
+    game(pacman, ghost, 400);
 }

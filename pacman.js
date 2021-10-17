@@ -3,6 +3,9 @@ class Characters {
         this.indexY = indexY;
         this.indexX = indexX;
         this.name = document.createElement('img');
+        this.lastX = indexX;
+        this.lastY = indexY;
+        this.whatChange = null;
     }
 
     createCharacter(src, classN, ) {
@@ -20,6 +23,7 @@ class Characters {
 
 
 let pacman = new Characters(0, 0);
+pacman.whatChange = MOVE_RIGHT;
 
 function addPacman(pacman, grid) {
     grid[pacman.indexY][pacman.indexX].classList.remove('point');
@@ -35,17 +39,8 @@ function delPacman(pacman, grid) {
 }
 
 function autoMovePacman(pacman, grid) {
-    if ((pacman.indexX + 1) <= grid[0].length - 1 && !grid[pacman.indexY][pacman.indexX + 1].classList.contains('wall')) {
-        delPacman(pacman, grid);
-        pacman.indexX++;
-        printCountPoint(pacman, grid);
-        addPacman(pacman, grid);
-    }
-}
-
-function movePacman(pacman, grid) {
     if (!flag) {
-        autoMovePacman(pacman, grid);
+        movePacman(pacman.whatChange, grid, pacman);
     }
     flag = false;
 }
@@ -53,9 +48,9 @@ function movePacman(pacman, grid) {
 
 function getUserChoose(e) {
     switch (e.key) {
-        case 'ArrowDown':
-            return 0;
         case 'ArrowUp':
+            return 0;
+        case 'ArrowDown':
             return 1;
         case 'ArrowLeft':
             return 2;
@@ -64,12 +59,9 @@ function getUserChoose(e) {
     }
 }
 
-
-
-function userMove(e, pacman, grid) {
-    flag = true;
-    switch (getUserChoose(e)) {
-        case 0:
+function movePacman(direction, grid, pacman) {
+    switch (direction) {
+        case MOVE_BOTT:
             if (pacman.indexY + 1 < grid.length && !grid[pacman.indexY + 1][pacman.indexX].classList.contains('wall')) { // шаг вниз
                 delPacman(pacman, grid);
                 pacman.indexY++;
@@ -77,7 +69,7 @@ function userMove(e, pacman, grid) {
                 addPacman(pacman, grid);
             }
             break;
-        case 1:
+        case MOVE_UP:
             if (pacman.indexY > 0 && !grid[pacman.indexY - 1][pacman.indexX].classList.contains('wall')) { // шаг вверх
                 delPacman(pacman, grid);
                 pacman.indexY--;
@@ -85,7 +77,7 @@ function userMove(e, pacman, grid) {
                 addPacman(pacman, grid);
             }
             break;
-        case 2:
+        case MOVE_LEFT:
             if (pacman.indexX - 1 >= 0 && !grid[pacman.indexY][pacman.indexX - 1].classList.contains('wall')) { // шаг влелво
                 delPacman(pacman, grid);
                 pacman.indexX--;
@@ -93,7 +85,7 @@ function userMove(e, pacman, grid) {
                 addPacman(pacman, grid);
             }
             break;
-        case 3:
+        case MOVE_RIGHT:
             if ((pacman.indexX + 1) <= (grid[0].length - 1) && !grid[pacman.indexY][pacman.indexX + 1].classList.contains('wall')) { // шаг вправо
                 delPacman(pacman, grid);
                 pacman.indexX++;
@@ -102,4 +94,11 @@ function userMove(e, pacman, grid) {
             }
             break;
     }
+}
+
+function userMove(e, pacman, grid) {
+    flag = true;
+    let direction = getUserChoose(e);
+    movePacman(direction, grid, pacman);
+    pacman.whatChange = direction;
 }

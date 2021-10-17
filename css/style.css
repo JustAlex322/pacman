@@ -80,6 +80,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  position: relative;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -94,6 +95,9 @@ body {
 
 .wrapper h2 {
   font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 0;
 }
 
 .game-board {
@@ -101,8 +105,8 @@ body {
   bottom: -20px;
   left: 550px;
   padding: 1px;
-  width: 372px;
-  height: 325px;
+  width: 432px;
+  height: 432px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

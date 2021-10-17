@@ -1,13 +1,9 @@
 let ghost = new Characters(0, 4);
+ghost.lastX = 0;
+ghost.lastY = 4;
+ghost.whatChange = null;
 
 
-
-// function addGhost(ghost, grid) {
-//     grid[ghost.index].insertAdjacentElement(
-//         'afterbegin',
-//         ghost.name,
-//     )
-// }
 
 function delGhost(ghost, grid) {
     document.querySelector('.last').classList.remove('last');
@@ -15,36 +11,62 @@ function delGhost(ghost, grid) {
     grid[ghost.indexY][ghost.indexX].classList.add('last');
 }
 
+function getOptimalPath(ghost, grid, ) {
+    let res = [];
+    if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('last')) { //вниз
+        res.push(MOVE_BOTT)
+    }
+    if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('last')) { // вверх
+        res.push(MOVE_UP)
+    }
+    if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('last')) { //влево
+        res.push(MOVE_LEFT)
+    }
+    if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('last')) { // вправо
+        res.push(MOVE_RIGHT)
+    }
+    return res;
+}
+
 function ghostMove(ghost, grid) {
-    let path = [0, 1, 2, 3, ];
-    let delEl = [];
-    getOptimalPath(ghost, grid, path, delEl);
+    let path = getOptimalPath(ghost, grid);
     switch (getRandomInt(path)) {
-        case 0:
-            // saveindexY(-step);
+        case MOVE_BOTT:
             delGhost(ghost, grid);
+            ghost.lastY = ghost.indexY;
             ghost.indexY++;
+            ghost.whatChange = 'y'
             ghost.addCharacterInGame(grid);
             break;
-        case 1:
-            // saveIndex2(step)
+        case MOVE_UP:
             delGhost(ghost, grid);
+            ghost.lastY = ghost.indexY;
             ghost.indexY--;
+            ghost.whatChange = 'y'
             ghost.addCharacterInGame(grid);
             break;
-        case 2:
-            // saveIndex3(1)
+        case MOVE_LEFT:
             delGhost(ghost, grid);
+            ghost.lastX = ghost.indexX
             ghost.indexX--;
+            ghost.whatChange = 'x'
             ghost.addCharacterInGame(grid);
             break;
-        case 3:
+        case MOVE_RIGHT:
             // saveIndex4(-1)
             delGhost(ghost, grid);
+            ghost.lastX = ghost.indexX
             ghost.indexX++;
+            ghost.whatChange = 'x'
             ghost.addCharacterInGame(grid);
             break;
+        default:
+            delGhost(ghost, grid);
+            if (ghost.whatChange === 'x') {
+                ghost.indexX = ghost.lastX;
+            } else {
+                ghost.indexY = ghost.lastY;
+            }
+            ghost.addCharacterInGame(grid);
     }
-    path.splice(0);
-    delEl.splice(0);
 }
