@@ -1,28 +1,37 @@
-let ghost = new Characters(0, 4);
-ghost.lastX = 0;
-ghost.lastY = 4;
-ghost.whatChange = null;
+class CharactersGhost extends Characters {
+    constructor(indexX, indexY, last, classG) {
+        super(indexX, indexY);
+        this.lastX = indexX;
+        this.lastY = indexY;
+        this.last = last;
+        this.class = classG;
+    }
+}
+
+let ghost = new CharactersGhost(7, 7, 'last-1', 'ghost');
+let ghost1 = new CharactersGhost(7, 7, 'last-2', 'ghost-1');
+let ghost2 = new CharactersGhost(7, 7, 'last-3', 'ghost-2');
 
 
 
 function delGhost(ghost, grid) {
-    document.querySelector('.last').classList.remove('last');
-    grid[ghost.indexY][ghost.indexX].querySelector('.ghost').remove();
-    grid[ghost.indexY][ghost.indexX].classList.add('last');
+    document.querySelector(`.${ghost.last}`).classList.remove(`${ghost.last}`);
+    grid[ghost.indexY][ghost.indexX].querySelector(`.${ghost.class}`).remove();
+    grid[ghost.indexY][ghost.indexX].classList.add(`${ghost.last}`);
 }
 
 function getOptimalPath(ghost, grid, ) {
     let res = [];
-    if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('last')) { //вниз
+    if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains(`${ghost.last}`)) { //вниз
         res.push(MOVE_BOTT)
     }
-    if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('last')) { // вверх
+    if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains(`${ghost.last}`)) { // вверх
         res.push(MOVE_UP)
     }
-    if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('last')) { //влево
+    if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains(`${ghost.last}`)) { //влево
         res.push(MOVE_LEFT)
     }
-    if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('last')) { // вправо
+    if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains(`${ghost.last}`)) { // вправо
         res.push(MOVE_RIGHT)
     }
     return res;

@@ -6,9 +6,9 @@ const MOVE_RIGHT = 3;
 function createMatr(col, row) {
     let resMatr = [];
     let temp;
-    for (let i = 0; i <= row; i++) {
+    for (let i = 0; i < row; i++) {
         temp = [];
-        for (let j = 0; j <= col; j++) {
+        for (let j = 0; j < col; j++) {
             temp.push(0);
         }
         resMatr.push(temp);

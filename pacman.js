@@ -3,8 +3,6 @@ class Characters {
         this.indexY = indexY;
         this.indexX = indexX;
         this.name = document.createElement('img');
-        this.lastX = indexX;
-        this.lastY = indexY;
         this.whatChange = null;
     }
 

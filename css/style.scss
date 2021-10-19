@@ -5,27 +5,17 @@ body {
 }
 
 .wrapper {
-    height: 100%;
     display: flex;
-    position: relative;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     h2 {
         font-size: 30px;
-        position: absolute;
-        top: 50%;
-        left: 0;
+        display: block;
     }
 }
 
 .game-board {
-    position: absolute;
-    bottom: -20px;
-    left: 550px;
     padding: 1px;
-    width: 432px;
-    height: 432px;
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 30px;
@@ -33,6 +23,7 @@ body {
     div {
         width: 60px;
         height: 60px;
+        overflow: hidden;
     }
     .pacman {
         z-index: 3;
@@ -45,14 +36,21 @@ body {
         }
     }
     .ghost {
-        z-index: 5;
         border-radius: 50%;
         img {
+            position: relative;
             width: 100%;
             height: 100%;
+            z-index: 1;
         }
         width: 60px;
         height: 60px;
+    }
+    .ghost-1 {
+        @extend .ghost;
+    }
+    .ghost-2 {
+        @extend .ghost;
     }
     .point {
         z-index: 2;
@@ -71,6 +69,7 @@ body {
     visibility: hidden;
     opacity: 0;
     position: fixed;
+    z-index: 20;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.719);
