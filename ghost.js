@@ -8,9 +8,9 @@ class CharactersGhost extends Characters {
     }
 }
 
-let ghost = new CharactersGhost(7, 7, 'last-1', 'ghost');
-let ghost1 = new CharactersGhost(7, 7, 'last-2', 'ghost-1');
-let ghost2 = new CharactersGhost(7, 7, 'last-3', 'ghost-2');
+let ghost = new CharactersGhost(0, 5, 'last-1', 'ghost');
+let ghost1 = new CharactersGhost(7, 5, 'last-2', 'ghost-1');
+let ghost2 = new CharactersGhost(7, 3, 'last-3', 'ghost-2');
 
 
 
@@ -20,26 +20,43 @@ function delGhost(ghost, grid) {
     grid[ghost.indexY][ghost.indexX].classList.add(`${ghost.last}`);
 }
 
-function getOptimalPath(ghost, grid, ) {
-    let res = [];
-    if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains(`${ghost.last}`)) { //вниз
-        res.push(MOVE_BOTT)
+
+function getMin(arr) {
+    let min = 1000;
+    let minIndex = 5;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] !== undefined) {
+            if (min > Math.floor(arr[i])) {
+                min = Math.floor(arr[i]);
+                minIndex = i
+            }
+        }
     }
-    if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains(`${ghost.last}`)) { // вверх
-        res.push(MOVE_UP)
-    }
-    if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains(`${ghost.last}`)) { //влево
-        res.push(MOVE_LEFT)
-    }
-    if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains(`${ghost.last}`)) { // вправо
-        res.push(MOVE_RIGHT)
-    }
-    return res;
+    return minIndex;
 }
 
-function ghostMove(ghost, grid) {
-    let path = getOptimalPath(ghost, grid);
-    switch (getRandomInt(path)) {
+function getOptimalPath(ghost, grid, pacman) {
+    let distance = new Array(4);
+
+    if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains(`${ghost.last}`)) { //вниз
+        distance[MOVE_BOTT] = (Math.abs(ghost.indexX - pacman.indexX) + Math.abs(ghost.indexY + 1 - pacman.indexY))
+    }
+    if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains(`${ghost.last}`)) { // вверх
+        distance[MOVE_UP] = (Math.abs(ghost.indexX - pacman.indexX) + Math.abs(ghost.indexY - 1 - pacman.indexY))
+    }
+    if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains(`${ghost.last}`)) { //влево
+        distance[MOVE_LEFT] = (Math.abs(ghost.indexX - 1 - pacman.indexX) + Math.abs(ghost.indexY - pacman.indexY))
+    }
+    if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains(`${ghost.last}`)) { // вправо
+        distance[MOVE_RIGHT] = (Math.abs(ghost.indexX + 1 - pacman.indexX) + Math.abs(ghost.indexY - pacman.indexY))
+    }
+    return getMin(distance)
+
+}
+
+function ghostMove(ghost, grid, pacman) {
+
+    switch (getOptimalPath(ghost, grid, pacman)) {
         case MOVE_BOTT:
             delGhost(ghost, grid);
             ghost.lastY = ghost.indexY;

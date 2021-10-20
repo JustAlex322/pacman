@@ -20,7 +20,7 @@ class Characters {
 }
 
 
-let pacman = new Characters(0, 0);
+let pacman = new Characters(14, 14);
 pacman.whatChange = MOVE_RIGHT;
 
 function addPacman(pacman, grid) {

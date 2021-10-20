@@ -71,15 +71,15 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
         timerId = setTimeout(tick, 600); // (*)
     }, 600);
     let timerId2 = setTimeout(function tick2() {
-        ghostMove(ghost, grid);
+        ghostMove(ghost, grid, pacman);
         timerId2 = setTimeout(tick2, speedGhost); // (*)
     }, 800);
     let timerId4 = setTimeout(function tick4() {
-        ghostMove(ghost1, grid);
+        ghostMove(ghost1, grid, pacman);
         timerId4 = setTimeout(tick4, speedGhost); // (*)
     }, 800);
     let timerId5 = setTimeout(function tick5() {
-        ghostMove(ghost2, grid);
+        ghostMove(ghost2, grid, pacman);
         timerId5 = setTimeout(tick5, speedGhost); // (*)
     }, 800);
     timerId3 = setTimeout(function tick3() {
