@@ -4,6 +4,7 @@ class Characters {
         this.indexX = indexX;
         this.name = document.createElement('img');
         this.whatChange = null;
+        this.life = 10;
     }
 
     createCharacter(src, classN, ) {

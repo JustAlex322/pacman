@@ -88,8 +88,9 @@ body {
 }
 
 .wrapper h2 {
-  font-size: 30px;
-  display: block;
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 30px;
 }
 
 .game-board {
@@ -199,5 +200,9 @@ body {
 .close {
   visibility: hidden;
   opacity: 0;
+}
+
+.hearts img {
+  width: 100px;
 }
 /*# sourceMappingURL=style.css.map */

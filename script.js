@@ -1,5 +1,6 @@
 const board = document.querySelector('.game-board');
 const score = document.querySelector('#score');
+const hearts = document.querySelector('.hearts');
 const step = 6;
 let point = 0;
 let flag = false;
@@ -23,18 +24,27 @@ function getCountPoint(level) {
 
 function checkLose(pacman, ghost, ghost1, ghost2, point, countPoint) {
     if (point == countPoint) {
-        // ghost.name.style.display = 'none';
-        // ghost1.name.style.display = 'none';
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
         return 0;
     } else if ((pacman.indexY == ghost.indexY && pacman.indexX == ghost.indexX) || (pacman.indexY == ghost1.indexY && pacman.indexX == ghost1.indexX) || (pacman.indexY == ghost2.indexY && pacman.indexX == ghost2.indexX)) {
-        pacman.name.style.display = 'none';
-        setTimeout(() => alert('Ты ЖАЛОК'), 100)
-        return 1;
+        pacman.life--;
+        if (pacman.life === 0) {
+            pacman.name.style.display = 'none';
+            setTimeout(() => alert('Ты ЖАЛОК'), 100)
+            return 1;
+        }
+        return 2;
     }
-    return 2;
+    return 3;
 }
 
+function clearTimeouts(t1, t2, t3, t4, t5) {
+    clearTimeout(t1);
+    clearTimeout(t2);
+    clearTimeout(t3);
+    clearTimeout(t4);
+    clearTimeout(t5);
+}
 
 let f = true;;
 let timerId3 = true;
@@ -71,26 +81,29 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
         timerId = setTimeout(tick, 600); // (*)
     }, 600);
     let timerId2 = setTimeout(function tick2() {
-        ghostMove(ghost, grid, pacman);
+        if (ghost.hasAroundPac(pacman)) {
+            ghostMove(ghost, grid, pacman, getOptimalPathForGhost1);
+        } else {
+            ghostMove(ghost, grid, pacman, getOptimalPath);
+        }
         timerId2 = setTimeout(tick2, speedGhost); // (*)
     }, 800);
     let timerId4 = setTimeout(function tick4() {
-        ghostMove(ghost1, grid, pacman);
+
+        ghostMove(ghost1, grid, pacman, getOptimalPath);
         timerId4 = setTimeout(tick4, speedGhost); // (*)
     }, 800);
     let timerId5 = setTimeout(function tick5() {
-        ghostMove(ghost2, grid, pacman);
+
+        ghostMove(ghost2, grid, pacman, getOptimalPath);
+        // (*)
         timerId5 = setTimeout(tick5, speedGhost); // (*)
     }, 800);
     timerId3 = setTimeout(function tick3() {
         f = checkLose(pacman, ghost, ghost1, ghost2, point, level.countPoint);
         if (f == 0 || f == 1) {
             document.removeEventListener('keydown', listener);
-            clearTimeout(timerId);
-            clearTimeout(timerId2);
-            clearTimeout(timerId3);
-            clearTimeout(timerId4);
-            clearTimeout(timerId5);
+            clearTimeouts(timerId, timerId2, timerId3, timerId4, timerId5)
             timerId3 = false
             setTimeout(() => {
                 if (f == 1) {
@@ -101,6 +114,11 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
                 }
             }, 200);
             return;
+        } else if (f == 2) {
+            alert('Вы потеряли жизнь');
+            hearts.lastElementChild.remove();
+            pacman.indexX = pacman.indexY = 10;
+            pacman.addCharacterInGame(grid, pacman);
         }
         timerId3 = setTimeout(tick3, 0);
     }, 50);
@@ -118,13 +136,25 @@ let timerWin = setTimeout(function win() {
 }, 0);
 
 
+let heart = document.createElement('img');
+heart.src = 'img/heart.png"'
+
 document.querySelector('#btn-win').onclick = () => {
     document.querySelector('#win').classList.add('close');
     flag = false;
     clearTimeout(timerWin);
-    score.classList.add('last');
+    score.classList.add('last-1');
+    score.classList.add('last-2');
+    score.classList.add('last-3');
+
     while (board.firstChild) {
         board.removeChild(board.firstChild);
+    }
+    for (let i = 0; i < 3; i++) {
+        hearts.insertAdjacentElement(
+            'beforeend',
+            heart
+        )
     }
     point = 0;
     pacman.indexX = 1;
