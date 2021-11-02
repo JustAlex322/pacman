@@ -1,4 +1,3 @@
-const board = document.querySelector('.game-board');
 const score = document.querySelector('#score');
 const hearts = document.querySelector('.hearts');
 const step = 6;

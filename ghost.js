@@ -56,30 +56,7 @@ function getOptimalPath(ghost, grid, ) {
     return getRandomInt(res);
 }
 
-function getPossibleMoves(x, y) {
-    var r, c, cMax,
-        rows = board.length,
-        cols = board[0].length,
-        rMax = Math.min(y + distance + 1, rows),
-        ret = [],
-        yOff;
 
-    // Start `distance` rows away from the current position
-    for (r = Math.max(y - distance, 0); r < rMax; r++) {
-        yOff = Math.abs(r - y);
-
-        // Work out where we should stop looping for this row
-        cMax = Math.min(x + distance - yOff + 1, cols);
-
-        // Start distance cols away from current pos
-        for (c = Math.max(x - distance + yOff, 0); c < cMax; c++) {
-            // If it's not the current position, add it to the result
-            if (x != c || y != r)
-                ret.push([c, r]);
-        }
-    }
-    return ret;
-}
 
 function getOptimalPathForGhost1(ghost, grid, pacman) {
     let distance = new Array(4);

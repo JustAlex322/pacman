@@ -2,6 +2,7 @@ const MOVE_UP = 0;
 const MOVE_BOTT = 1;
 const MOVE_LEFT = 2;
 const MOVE_RIGHT = 3;
+const board = document.querySelector('.game-board');
 
 function createMatr(col, row) {
     let resMatr = [];
