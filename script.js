@@ -4,6 +4,12 @@ const step = 6;
 let point = 0;
 let flag = false;
 
+const WIN = 0;
+const LOSE = 1;
+const LOST_LIFE = 2;
+
+
+
 let printCountPoint = (pacman, grid) => {
     point += grid[pacman.indexY][pacman.indexX].classList.contains('point');
     score.textContent = point;
@@ -24,15 +30,15 @@ function getCountPoint(level) {
 function checkLose(pacman, ghost, ghost1, ghost2, point, countPoint) {
     if (point == countPoint) {
         alert('Победа за тобой...А Я ... ОБРЕТУ ПОКОЙ!');
-        return 0;
+        return WIN;
     } else if ((pacman.indexY == ghost.indexY && pacman.indexX == ghost.indexX) || (pacman.indexY == ghost1.indexY && pacman.indexX == ghost1.indexX) || (pacman.indexY == ghost2.indexY && pacman.indexX == ghost2.indexX)) {
         pacman.life--;
         if (pacman.life === 0) {
             pacman.name.style.display = 'none';
             setTimeout(() => alert('Ты ЖАЛОК'), 100)
-            return 1;
+            return LOSE;
         }
-        return 2;
+        return LOST_LIFE;
     }
     return 3;
 }
@@ -100,12 +106,12 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
     }, 800);
     timerId3 = setTimeout(function tick3() {
         f = checkLose(pacman, ghost, ghost1, ghost2, point, level.countPoint);
-        if (f == 0 || f == 1) {
+        if (f == WIN || f == LOSE) {
             document.removeEventListener('keydown', listener);
             clearTimeouts(timerId, timerId2, timerId3, timerId4, timerId5)
             timerId3 = false
             setTimeout(() => {
-                if (f == 1) {
+                if (f == LOSE) {
                     document.querySelector('#lose').classList.add('open');
                     document.querySelector('#btn').onclick = () => {
                         location.reload();
@@ -113,7 +119,7 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
                 }
             }, 200);
             return;
-        } else if (f == 2) {
+        } else if (f == LOST_LIFE) {
             alert('Вы потеряли жизнь');
             hearts.lastElementChild.remove();
             pacman.indexX = pacman.indexY = 10;
