@@ -7,7 +7,7 @@ class CharactersGhost extends Characters {
         this.class = classG;
     }
     hasAroundPac(pacman, ) {
-        return Math.abs(this.indexX - pacman.indexX) <= 6 || Math.abs(this.indexY - pacman.indexY) <= 6;
+        return Math.abs(this.indexX - pacman.indexX) <= 5 || Math.abs(this.indexY - pacman.indexY) <= 5;
     }
 }
 let ghost = new CharactersGhost(0, 5, 'last-1', 'ghost');
@@ -22,21 +22,6 @@ function delGhost(ghost, grid) {
     grid[ghost.indexY][ghost.indexX].classList.add(`${ghost.last}`);
 }
 
-
-
-function getMin(arr) {
-    let min = 1000;
-    let minIndex = 5;
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] !== undefined) {
-            if (min > Math.floor(arr[i])) {
-                min = Math.floor(arr[i]);
-                minIndex = i
-            }
-        }
-    }
-    return minIndex;
-}
 
 function getOptimalPath(ghost, grid, ) {
     let res = [];
@@ -56,16 +41,15 @@ function getOptimalPath(ghost, grid, ) {
     return getRandomInt(res);
 }
 
-
-
 function getOptimalPathForGhost1(ghost, grid, pacman) {
-    let distance = new Array(4);
+    let distance = [1000, 1000, 1000, 1000];
 
     if (ghost.indexY + 1 < grid.length && !grid[ghost.indexY + 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY + 1][ghost.indexX].classList.contains(`${ghost.last}`)) { //вниз
         distance[MOVE_BOTT] = (Math.abs(ghost.indexX - pacman.indexX) + Math.abs(ghost.indexY + 1 - pacman.indexY))
     }
     if (ghost.indexY - 1 >= 0 && !grid[ghost.indexY - 1][ghost.indexX].classList.contains('wall') && !grid[ghost.indexY - 1][ghost.indexX].classList.contains(`${ghost.last}`)) { // вверх
-        distance[MOVE_UP] = (Math.abs(ghost.indexX - pacman.indexX) + Math.abs(ghost.indexY - 1 - pacman.indexY))
+        distance[MOVE_UP] = (
+            Math.abs(ghost.indexX - pacman.indexX) + Math.abs(ghost.indexY - pacman.indexY))
     }
     if (ghost.indexX - 1 >= 0 && !grid[ghost.indexY][ghost.indexX - 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX - 1].classList.contains(`${ghost.last}`)) { //влево
         distance[MOVE_LEFT] = (Math.abs(ghost.indexX - 1 - pacman.indexX) + Math.abs(ghost.indexY - pacman.indexY))
@@ -73,38 +57,36 @@ function getOptimalPathForGhost1(ghost, grid, pacman) {
     if (ghost.indexX + 1 < grid.length && !grid[ghost.indexY][ghost.indexX + 1].classList.contains('wall') && !grid[ghost.indexY][ghost.indexX + 1].classList.contains(`${ghost.last}`)) { // вправо
         distance[MOVE_RIGHT] = (Math.abs(ghost.indexX + 1 - pacman.indexX) + Math.abs(ghost.indexY - pacman.indexY))
     }
-    return getMin(distance)
+    return distance.indexOf(Math.min(...distance))
+}
+
+let changeGhost = (ghost, grid, axis, sign) => {
+    delGhost(ghost, grid);
+    if (axis === 'x') {
+        ghost.lastX = ghost.indexX;
+        ghost.indexX += 1 * sign;
+        ghost.whatChange = 'x'
+    } else {
+        ghost.lastY = ghost.indexY;
+        ghost.indexY += 1 * sign;
+        ghost.whatChange = 'y'
+    }
+    ghost.addCharacterInGame(grid);
 }
 
 function ghostMove(ghost, grid, pacman, getPath) {
     switch (getPath(ghost, grid, pacman)) {
         case MOVE_BOTT:
-            delGhost(ghost, grid);
-            ghost.lastY = ghost.indexY;
-            ghost.indexY++;
-            ghost.whatChange = 'y'
-            ghost.addCharacterInGame(grid);
+            changeGhost(ghost, grid, 'y', 1)
             break;
         case MOVE_UP:
-            delGhost(ghost, grid);
-            ghost.lastY = ghost.indexY;
-            ghost.indexY--;
-            ghost.whatChange = 'y'
-            ghost.addCharacterInGame(grid);
+            changeGhost(ghost, grid, 'y', -1)
             break;
         case MOVE_LEFT:
-            delGhost(ghost, grid);
-            ghost.lastX = ghost.indexX
-            ghost.indexX--;
-            ghost.whatChange = 'x'
-            ghost.addCharacterInGame(grid);
+            changeGhost(ghost, grid, 'x', -1)
             break;
         case MOVE_RIGHT:
-            delGhost(ghost, grid);
-            ghost.lastX = ghost.indexX
-            ghost.indexX++;
-            ghost.whatChange = 'x'
-            ghost.addCharacterInGame(grid);
+            changeGhost(ghost, grid, 'x', 1)
             break;
         default:
             delGhost(ghost, grid);
