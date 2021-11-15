@@ -1,4 +1,4 @@
-let pacman = new Characters(14, 14);
+let pacman = new Characters(12, 12);
 pacman.whatChange = MOVE_RIGHT;
 
 function addPacman(pacman, grid) {

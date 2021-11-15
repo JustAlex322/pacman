@@ -61,13 +61,13 @@ ghost2.createCharacter("img/ghost1.jpg", "ghost-2");
 
 
 function game(pacman, ghost, ghost1, ghost2, speedGhost) {
-    board.style.width = 15 * 61 + 'px';
-    board.style.height = 15 * 61 + 'px';
+    board.style.width = 13 * 61 + 'px';
+    board.style.height = 13 * 61 + 'px';
     let level = {
         countPoint: 0,
         matr: null,
     }
-    level.matr = createLab(15, 15);
+    level.matr = createLab(13, 13);
     let grid = [];
     createBoard(level, grid);
     pacman.addCharacterInGame(grid, pacman);
