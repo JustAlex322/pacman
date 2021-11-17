@@ -4,7 +4,7 @@ const MOVE_LEFT = 2;
 const MOVE_RIGHT = 3;
 const board = document.querySelector('.game-board');
 
-function createMatr(col, row) {
+const createMatr = (col, row) => {
     let resMatr = [];
     let temp;
     for (let i = 0; i < row; i++) {
@@ -18,12 +18,12 @@ function createMatr(col, row) {
 }
 
 
-function getRandomInt(path) {
+const getRandomInt = (path) => {
     return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
 }
 
 
-function getPath(matr, cleaner) {
+const getPath = (matr, cleaner) => {
     let res = [];
     if (cleaner.y - 2 >= 0) {
         res.push(MOVE_UP);
@@ -40,7 +40,7 @@ function getPath(matr, cleaner) {
     return res;
 }
 
-function moveCleaner(matr, cleaner, ) {
+const moveCleaner = (matr, cleaner, ) => {
     let pathCard = getPath(matr, cleaner);
     switch (getRandomInt(pathCard)) {
         case MOVE_UP:
@@ -74,7 +74,8 @@ function moveCleaner(matr, cleaner, ) {
     }
 }
 
-function createLab(col, row) {
+
+const createLab = (col, row) => {
     let matr = createMatr(col, row);
     let cleaner = {
         x: 0,
@@ -86,8 +87,7 @@ function createLab(col, row) {
     return matr
 }
 
-
-function isReadyMatr(matr) {
+const isReadyMatr = (matr) => {
     for (let i = 0; i < matr.length; i += 2) {
         for (let j = 0; j < matr[i].length; j += 2) {
             if (matr[i][j] == 0) {
@@ -98,7 +98,7 @@ function isReadyMatr(matr) {
     return true;
 }
 
-function createBoard(level, grid, ) {
+const createBoard = (level, grid, ) => {
     let tempArr = [];
     for (let i = 0; i < level.matr.length; i++) {
         tempArr = [];
