@@ -19,7 +19,7 @@ const createMatr = (col, row) => {
 
 
 const getRandomInt = (path) => {
-    return path[Math.floor(Math.random() * path.length)] //Максимум не включается, минимум включается
+    return path[Math.floor(Math.random() * path.length)]
 }
 
 

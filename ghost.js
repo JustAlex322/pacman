@@ -1,19 +1,6 @@
-class CharactersGhost extends Characters {
-    constructor(indexX, indexY, last, classG) {
-        super(indexX, indexY);
-        this.lastX = indexX;
-        this.lastY = indexY;
-        this.last = last;
-        this.class = classG;
-    }
-    hasAroundPac(pacman, ) {
-        return Math.abs(this.indexX - pacman.indexX) <= 5 && Math.abs(this.indexY - pacman.indexY) <= 5;
-    }
-}
 let ghost = new CharactersGhost(0, 5, 'last-1', 'ghost');
 let ghost1 = new CharactersGhost(7, 5, 'last-2', 'ghost-1');
 let ghost2 = new CharactersGhost(7, 3, 'last-3', 'ghost-2');
-
 
 
 function delGhost(ghost, grid) {
@@ -58,6 +45,9 @@ function getOptimalPath(ghost, grid, ) {
     return getRandomInt(res);
 }
 
+
+
+
 function getOptimalPathForGhost1(ghost, grid, pacman) {
     let distance = [Infinity, Infinity, Infinity, Infinity, ];
 
@@ -78,15 +68,15 @@ function getOptimalPathForGhost1(ghost, grid, pacman) {
     return (Math.min(...distance) !== Infinity) ? distance.indexOf(Math.min(...distance)) : -1;
 }
 
-let changeGhost = (ghost, grid, axis, sign) => {
+let renderingGhost = (ghost, grid, axis, sign) => {
     delGhost(ghost, grid);
     if (axis === 'x') {
         ghost.lastX = ghost.indexX;
-        ghost.indexX += 1 * sign;
+        ghost.indexX += sign;
         ghost.whatChange = 'x'
     } else {
         ghost.lastY = ghost.indexY;
-        ghost.indexY += 1 * sign;
+        ghost.indexY += sign;
         ghost.whatChange = 'y'
     }
     ghost.addCharacterInGame(grid);
@@ -95,16 +85,16 @@ let changeGhost = (ghost, grid, axis, sign) => {
 function ghostMove(ghost, grid, pacman, getPath) {
     switch (getPath(ghost, grid, pacman)) {
         case MOVE_BOTT:
-            changeGhost(ghost, grid, 'y', 1)
+            renderingGhost(ghost, grid, 'y', 1)
             break;
         case MOVE_UP:
-            changeGhost(ghost, grid, 'y', -1)
+            renderingGhost(ghost, grid, 'y', -1)
             break;
         case MOVE_LEFT:
-            changeGhost(ghost, grid, 'x', -1)
+            renderingGhost(ghost, grid, 'x', -1)
             break;
         case MOVE_RIGHT:
-            changeGhost(ghost, grid, 'x', 1)
+            renderingGhost(ghost, grid, 'x', 1)
             break;
         default:
             delGhost(ghost, grid);

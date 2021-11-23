@@ -39,9 +39,9 @@ function clearTimeouts(arrTimers) {
 }
 
 pacman.createCharacter("img/pacman2.jpg", "pacman");
-ghost.createCharacter("https://static.wikia.nocookie.net/among-us/images/5/5e/Bluenew.png/revision/latest/scale-to-width-down/250?cb=20210616054220&path-prefix=ru", "ghost");
+ghost.createCharacter("img/ghost2.png", "ghost");
 ghost1.createCharacter("img/ghost2.png", "ghost-1");
-ghost2.createCharacter("img/ghost1.jpg", "ghost-2");
+ghost2.createCharacter("img/ghost2.png", "ghost-2");
 
 
 
@@ -115,6 +115,8 @@ function game(pacman, ghost, ghost1, ghost2, speedGhost) {
 }
 
 game(pacman, ghost, ghost1, ghost2, 600);
+let heart = document.createElement('img');
+heart.src = 'img/heart.png"'
 
 // онклик новый левел!!!!
 let timerWin = setTimeout(function win() {
@@ -125,8 +127,6 @@ let timerWin = setTimeout(function win() {
 }, 0);
 
 
-let heart = document.createElement('img');
-heart.src = 'img/heart.png"'
 
 document.querySelector('#btn-win').onclick = () => {
     document.querySelector('#win').classList.add('close');

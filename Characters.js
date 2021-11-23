@@ -19,3 +19,16 @@ class Characters {
         )
     }
 }
+
+class CharactersGhost extends Characters {
+    constructor(indexX, indexY, last, classG) {
+        super(indexX, indexY);
+        this.lastX = indexX;
+        this.lastY = indexY;
+        this.last = last;
+        this.class = classG;
+    }
+    hasAroundPac(pacman, ) {
+        return Math.abs(this.indexX - pacman.indexX) <= 5 && Math.abs(this.indexY - pacman.indexY) <= 5;
+    }
+}

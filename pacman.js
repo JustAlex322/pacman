@@ -22,51 +22,51 @@ function autoMovePacman(pacman, grid) {
 }
 
 
-function getUserChoose(e) {
+function getUserChoice(e) {
     switch (e.key) {
         case 'ArrowUp':
-            return 0;
+            return MOVE_UP;
         case 'ArrowDown':
-            return 1;
+            return MOVE_BOTT;
         case 'ArrowLeft':
-            return 2;
+            return MOVE_LEFT;
         case 'ArrowRight':
-            return 3;
+            return MOVE_RIGHT;
     }
+}
+
+
+const renderingPacman = (pacman, grid, axis, sign) => {
+    delPacman(pacman, grid);
+    if (axis === 'x') {
+        pacman.indexX += sign;
+    } else {
+        pacman.indexY += sign
+    }
+    printCountPoint(pacman, grid);
+    addPacman(pacman, grid);
 }
 
 function movePacman(direction, grid, pacman) {
     switch (direction) {
         case MOVE_BOTT:
             if (pacman.indexY + 1 < grid.length && !grid[pacman.indexY + 1][pacman.indexX].classList.contains('wall')) { // шаг вниз
-                delPacman(pacman, grid);
-                pacman.indexY++;
-                printCountPoint(pacman, grid);
-                addPacman(pacman, grid);
+                renderingPacman(pacman, grid, 'y', 1)
             }
             break;
         case MOVE_UP:
             if (pacman.indexY > 0 && !grid[pacman.indexY - 1][pacman.indexX].classList.contains('wall')) { // шаг вверх
-                delPacman(pacman, grid);
-                pacman.indexY--;
-                printCountPoint(pacman, grid);
-                addPacman(pacman, grid);
+                renderingPacman(pacman, grid, 'y', -1)
             }
             break;
         case MOVE_LEFT:
             if (pacman.indexX - 1 >= 0 && !grid[pacman.indexY][pacman.indexX - 1].classList.contains('wall')) { // шаг влелво
-                delPacman(pacman, grid);
-                pacman.indexX--;
-                printCountPoint(pacman, grid);
-                addPacman(pacman, grid);
+                renderingPacman(pacman, grid, 'x', -1)
             }
             break;
         case MOVE_RIGHT:
             if ((pacman.indexX + 1) <= (grid[0].length - 1) && !grid[pacman.indexY][pacman.indexX + 1].classList.contains('wall')) { // шаг вправо
-                delPacman(pacman, grid);
-                pacman.indexX++;
-                printCountPoint(pacman, grid);
-                addPacman(pacman, grid);
+                renderingPacman(pacman, grid, 'x', 1)
             }
             break;
     }
@@ -74,7 +74,7 @@ function movePacman(direction, grid, pacman) {
 
 function userMove(e, pacman, grid) {
     flag = true;
-    let direction = getUserChoose(e);
+    let direction = getUserChoice(e);
     movePacman(direction, grid, pacman);
     pacman.whatChange = direction;
 }
